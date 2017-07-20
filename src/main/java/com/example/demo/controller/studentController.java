@@ -4,9 +4,13 @@ import com.example.demo.dao.studentDao;
 import com.example.demo.entity.student;
 import com.example.demo.service.studentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.persistence.Transient;
+import javax.transaction.Transactional;
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -79,11 +83,24 @@ studentService.deleteStudent(id);
     }
 
     /**
-     * 已添加对象的方式进行添加一个学生
+     * 用添加对象的方式进行添加一个学生
       */
     @PostMapping("/student")
-    public student saveStudent(student student){
+    public student saveStudent(@Valid student student, BindingResult BindingResult ){
+        if(BindingResult.hasErrors()){
+            //BindingResult对象是获取错误信息的对象
+            //下面的BindingResult.getFieldError().getDefaultMessage()这个方法是为了获取错误信息内容的
+            System.out.println(BindingResult.getFieldError().getDefaultMessage());
+            return null;
+        }
         return studentService.saveStudent(student);
 }
 
+    /**
+     * 像表中同时插入俩条数据，如果其中一条失败了，另外一条也需要失败，如果成功，应该俩条都成功在service层添加事物的注解Transactional
+     */
+    @PostMapping("/insetTwoStudent")
+    public void insetTwoStudent(){
+        studentService.insetTwoStudent();
+}
 }

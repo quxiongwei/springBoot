@@ -16,4 +16,5 @@ public interface studentService {
    student updateStudent(Integer id,String name,String age);
    void deleteStudent(Integer id);
    student saveStudent(student student);
+   void insetTwoStudent();
 }

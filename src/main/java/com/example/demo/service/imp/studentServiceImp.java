@@ -6,6 +6,7 @@ import com.example.demo.service.studentService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.transaction.Transactional;
 import java.util.List;
 
 /**
@@ -51,6 +52,20 @@ public class studentServiceImp implements studentService {
         student.setAge(student.getAge());
         student.setName(student.getName());
         return studentDao.save(student);
+    }
+
+    @Override
+    @Transactional
+    public void  insetTwoStudent() {
+        student student = new student();
+        student.setName("A");
+        student.setAge("22");
+        studentDao.save(student);
+
+        student student1 = new student();
+        student1.setName("B");
+        student1.setAge("2");
+        studentDao.save(student1);
     }
 
 
