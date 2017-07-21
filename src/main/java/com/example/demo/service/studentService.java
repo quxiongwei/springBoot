@@ -12,9 +12,11 @@ public interface studentService {
 
     List<student> serchStudent();
     student findByStudent(Integer id);
-   student saveStudent(String name ,String age);
-   student updateStudent(Integer id,String name,String age);
+   student saveStudent(String name ,Integer age);
+   student updateStudent(Integer id,String name,Integer age);
    void deleteStudent(Integer id);
    student saveStudent(student student);
    void insetTwoStudent();
+    void serchStudentByid(Integer id) throws Exception;
+
 }

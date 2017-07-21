@@ -1,10 +1,10 @@
 package com.example.demo.entity;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 /**
  * Created by 屈雄伟 on 2017/7/19.
@@ -16,8 +16,17 @@ public class student {
     private Integer id;
     private  String name;
     @Min(value=18,message = "未成年学生应该继续学习，不允许贪玩")
-    private  String age;
+    private  Integer age;
+    @NotNull(message = "money不能为null")
+    private  String money;
 
+    public String getMoney() {
+        return money;
+    }
+
+    public void setMoney(String money) {
+        this.money = money;
+    }
 
     public student() {
     }
@@ -38,11 +47,21 @@ public class student {
         this.name = name;
     }
 
-    public String getAge() {
+    public Integer getAge() {
         return age;
     }
 
-    public void setAge(String age) {
+    public void setAge(Integer age) {
         this.age = age;
+    }
+
+    @Override
+    public String toString() {
+        return "student{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", age='" + age + '\'' +
+                ", money='" + money + '\'' +
+                '}';
     }
 }

@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 
+import com.example.demo.Util.ResultUtil;
 import com.example.demo.dao.studentDao;
+import com.example.demo.entity.Result;
 import com.example.demo.entity.student;
 import com.example.demo.service.studentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +30,6 @@ public class studentController {
   @GetMapping("/student")
     public List<student>serchStudent(){
        student student = new student();
-
        return studentService.serchStudent();
     }
 
@@ -50,7 +51,7 @@ public class studentController {
      * @return
      */
     @GetMapping("/saveStudent")
-    public student saveStudent(@RequestParam("name")String name,@RequestParam("age")String age){
+    public student saveStudent(@RequestParam("name")String name,@RequestParam("age")Integer age){
        /* student student = new student();
         student.setAge(age);
         student.setName(name);*/
@@ -67,7 +68,7 @@ public class studentController {
      * @return
      */
     @PutMapping ("/updateStudent")
-    public student updateStudent(@RequestParam("id")Integer id,@RequestParam("name")String name,@RequestParam("age")String age){
+    public student updateStudent(@RequestParam("id")Integer id,@RequestParam("name")String name,@RequestParam("age")Integer age){
 
 
         return studentService.updateStudent(id,name,age);
@@ -86,14 +87,16 @@ studentService.deleteStudent(id);
      * 用添加对象的方式进行添加一个学生
       */
     @PostMapping("/student")
-    public student saveStudent(@Valid student student, BindingResult BindingResult ){
+    public Result<student> saveStudent(@Valid student student, BindingResult BindingResult ){
         if(BindingResult.hasErrors()){
             //BindingResult对象是获取错误信息的对象
             //下面的BindingResult.getFieldError().getDefaultMessage()这个方法是为了获取错误信息内容的
             System.out.println(BindingResult.getFieldError().getDefaultMessage());
-            return null;
+            Result message = ResultUtil.message(100, BindingResult.getFieldError().getDefaultMessage());
+           return message;
         }
-        return studentService.saveStudent(student);
+        Result success = ResultUtil.success(studentService.saveStudent(student));
+        return success;
 }
 
     /**
@@ -103,4 +106,15 @@ studentService.deleteStudent(id);
     public void insetTwoStudent(){
         studentService.insetTwoStudent();
 }
+
+    /**
+     * 根据一个学生的年龄判断在上什么学
+     * @param id
+     * @throws Exception
+     */
+    @GetMapping("/serchStudentByid")
+    public void serchStudentByid(@RequestParam("id")Integer id)throws Exception {
+       studentService.serchStudentByid(id);
+    }
+
 }
