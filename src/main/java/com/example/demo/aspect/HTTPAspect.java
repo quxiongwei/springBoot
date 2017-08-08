@@ -30,7 +30,7 @@ public class HTTPAspect {
      * 这个方法里面主要是设定了aop 的 切面编程 获取controller 里面的方法执行的log记录
      */
 
-    @Pointcut("execution(public * com.example.demo.controller.studentController.*(..))")
+    @Pointcut("execution(public * com.example.demo.controller..*(..))")
     public void log(){
     }
 

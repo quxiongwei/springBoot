@@ -17,3 +17,12 @@ spring:
       properties:
          hibernate:
             dialect: org.hibernate.dialect.MySQL5Dialect
+    thymeleaf:
+      prefix: classpath:/templates/
+      mode: HTML5
+      cache: false
+    mvc:
+      static-path-pattern:
+server:
+  port: 8081
+

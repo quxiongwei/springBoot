@@ -20,7 +20,7 @@ import javax.validation.Valid;
 public class ExceptionHandle{
     private final  static Logger logger =LoggerFactory.getLogger(ExceptionHandle.class);
     @ExceptionHandler(value = Exception.class)
-   @ResponseBody
+    @ResponseBody
     public Result handle( Exception e){
         if (e instanceof ExceptionMsg){
             ExceptionMsg exception =(ExceptionMsg) e;

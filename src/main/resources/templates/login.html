@@ -1,0 +1,60 @@
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Insert title here</title>
+</head>
+<body>
+错误信息：<h4 th:text="${msg}"></h4>
+<form action="" method="post">
+    <p>账号：<input type="text" name="username" value="admin"/></p>
+    <p>密码：<input type="text" name="password" value="123456"/></p>
+    <p><input type="submit" value="登录"/></p>
+</form>
+</body>
+</html>
+<!--
+<!DOCTYPE html>
+<html lang="en">
+<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<head>
+    <meta charset="UTF-8"></meta>
+    <title>Title</title>
+</head>
+<body>
+<form action="" method="post">
+    <p>账号：<input type="text" id = "username" name="username" /></p>
+    <p>密码：<input id = "password" type="password"  name="password" /></p>
+  <button type="button" onclick="login();">登 录</button>
+</form>
+</body>
+<script type="text/javascript">
+    function login() {
+        var username = document.getElementById("username").valueOf();
+        var password = document.getElementById("password").valueOf();
+        $.ajax({
+            type : "POST",
+            data : {
+                "username" : username.value,
+                "password" : password.value
+            },
+            dataType : "json",
+            //contentType : 'application/json',
+            url : "/user/submitLogin",
+            success : function(result) {
+
+                if (result.status != 200) {
+                   alert("哦豁",result.message,"error");
+                } else {
+                    alert({title:"太帅了",text:"登录成功，进入系统！",type:"success"},
+                        function () {
+                            location.href = "/index";
+                        });
+                }
+            }
+            ,error:function (error) {
+             alert(error)
+            }
+        });
+    }
+</script>
+</html>-->
