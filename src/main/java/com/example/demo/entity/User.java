@@ -2,11 +2,9 @@ package com.example.demo.entity;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by 屈雄伟 on 2017/7/24.
@@ -22,6 +20,18 @@ public class User implements Serializable {
     @NotEmpty(message = "密码不能为空")
     private String password;
     private String salt;//加密密码的盐
+    private byte state;//用户状态,0:创建未认证（比如没有激活，没有输入验证码等等）--等待验证的用户 , 1:正常状态,2：用户被锁定.
+
+
+    @ManyToMany(fetch=FetchType.EAGER)//立即从数据库中进行加载数据;
+    @JoinTable(name = "SysUserRole", joinColumns = { @JoinColumn(name = "uid") }, inverseJoinColumns ={@JoinColumn(name = "roleId") })
+    private List<SysRole> roleList;// 一个用户具有多个角色
+    public List<SysRole> getRoleList() {
+        return roleList;
+    }
+    public void setRoleList(List<SysRole> roleList) {
+        this.roleList = roleList;
+    }
 
     public String getSalt() {
         return salt;
@@ -30,8 +40,6 @@ public class User implements Serializable {
     public void setSalt(String salt) {
         this.salt = salt;
     }
-
-    private byte state;
 
     public byte getState() {
         return state;

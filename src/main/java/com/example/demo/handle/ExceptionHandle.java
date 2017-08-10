@@ -28,6 +28,7 @@ public class ExceptionHandle{
         }else {
             logger.error("[系统异常]{}",e);
             return ResultUtil.message(-1, e .getMessage());
+
         }
     }
 }

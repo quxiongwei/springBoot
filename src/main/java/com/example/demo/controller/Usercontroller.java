@@ -70,7 +70,7 @@ public class Usercontroller {
         return "/login";
     }
 
-    @PostMapping(value = "/submitLogin")
+ /*   @PostMapping(value = "/submitLogin")
     @ResponseBody
     public Map<String,Object> submitLogin(@RequestParam("username") String username ,@RequestParam("password") String password ){
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
@@ -86,8 +86,20 @@ public class Usercontroller {
         }
         return  resultMap;
     }
+*/
 
-
+    @RequestMapping("/userInfo")
+    public String  userInfo(){
+        return  "/userInfo";
+    }
+    @RequestMapping("/userInfoAdd")
+    public String  userInfoAdd(){
+        return  "/userInfoAdd";
+    }
+    @RequestMapping("/userInfoDel")
+    public String  userInfoDel(){
+        return  "/userInfoDel";
+    }
 
 
 
@@ -140,6 +152,10 @@ public class Usercontroller {
          return  userService.serchUser();
     }*/
 
+   @RequestMapping("/logout")
+   public String logout(){
+       return "logout";
+   }
   @RequestMapping("/403")
     public String unauthorizedRole(){
         System.out.println("------没有权限-------");
