@@ -42,8 +42,8 @@ public class ShiroConfig {
 
 		//配置记住我或认证通过可以访问的地址
 		filterChainDefinitionMap.put("/index", "user");
-		filterChainDefinitionMap.put("/", "user");
-		filterChainDefinitionMap.put("/userInfo", "user");
+		/*filterChainDefinitionMap.put("/", "user");
+		filterChainDefinitionMap.put("/userInfo", "user");*/
 		//filterChainDefinitionMap.put("userInfo","admin");
 
 		//配置退出过滤器,其中的具体的退出代码Shiro已经替我们实现了

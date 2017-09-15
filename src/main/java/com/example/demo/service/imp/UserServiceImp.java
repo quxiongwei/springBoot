@@ -27,4 +27,9 @@ public class UserServiceImp implements UserService {
     public User findByUsername(String username) {
         return userDao.findByUsername(username);
     }
+
+    @Override
+    public User findById(Integer id) {
+        return userDao.findById(id);
+    }
 }

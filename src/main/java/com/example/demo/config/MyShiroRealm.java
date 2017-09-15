@@ -4,6 +4,8 @@ package com.example.demo.config;
 import com.example.demo.entity.SysPermission;
 import com.example.demo.entity.SysRole;
 import com.example.demo.entity.User;
+import com.example.demo.service.SysPermissionService;
+import com.example.demo.service.SysRoleService;
 import com.example.demo.service.UserService;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -12,51 +14,77 @@ import org.apache.shiro.realm.AuthenticatingRealm;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
+import static org.apache.shiro.web.filter.mgt.DefaultFilter.roles;
 import static org.apache.shiro.web.filter.mgt.DefaultFilter.user;
 
 public class MyShiroRealm extends AuthorizingRealm {
-@Autowired
+    private Logger logger = LoggerFactory.getLogger(MyShiroRealm.class);
+
+
+
+    @Autowired
 private UserService userService;
+@Autowired
+private SysRoleService sysRoleService;
+@Autowired
+private SysPermissionService sysPermissionService;
 
     @Override
-    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
+    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         System.out.println("MyShiroRealm.doGetAuthenticationInfo()");
-                System.out.println("进来了");
+        UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
         //获取用户的输入的账号.
         String username = (String)token.getPrincipal();
         System.out.println(token.getCredentials());
+
         //通过username从数据库中查找 User对象，如果找到，没找到.
         //实际项目中，这里可以根据实际情况做缓存，如果不做，Shiro自己也是有时间间隔机制，2分钟内不会重复执行该方法
-        User user = userService.findByUsername(username);
-        /*
-       *//*
+        User userInfo = userService.findByUsername(username);
+        System.out.println("----->>userInfo="+userInfo);
+       /* if(userInfo != null){
+            List<SysRole> rlist  = sysRoleService.findById(userInfo.getId());
+            List<SysPermission> plist = sysPermissionService.findById(userInfo.getId());
+            List<String> roleStrlist=new ArrayList<String>();////用户的角色集合
+            List<String> perminsStrlist=new ArrayList<String>();//用户的权限集合
+            for ( SysRole sysRole : rlist){
+                roleStrlist.add(sysRole.getRole());
+                for(SysPermission p: sysRole.getPermissions()){
+                    perminsStrlist.add(p.getName());
+                }
+           }
+          userInfo.setRoleList(rlist);
+            //userInfo.set
+            return null;
+        }*/
+
+       /*
         * 获取权限信息:这里没有进行实现，
         * 请自行根据UserInfo,Role,Permission进行实现；
         * 获取之后可以在前端for循环显示所有链接;
-        *//*
-        //userInfo.setPermissions(userService.findPermissions(user));
         */
-        System.out.println("----->>user="+user);
-        if(user == null){
-            return null;
-        }
+        //userInfo.setPermissions(userService.findPermissions(user));
+
+
         //账号判断;
 
         //加密方式;
         //交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配，如果觉得人家的不好可以自定义实现
         SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
-                        user, //用户名
-                        user.getPassword(), //密码
-                        ByteSource.Util.bytes(user.getCredentialsSalt()),//salt=username+salt*/
-                        getName()  //realm name
-                );
-    return authenticationInfo ;
+                userInfo, //用户名
+                userInfo.getPassword(), //密码
+                ByteSource.Util.bytes(userInfo.getCredentialsSalt()),//salt=username+salt
+                getName()  //realm name
+        );
 
+        return authenticationInfo;
     }
 
 
@@ -84,10 +112,14 @@ private UserService userService;
         * 缓存过期之后会再次执行。
         */
         System.out.println("权限配置-->MyShiroRealm.doGetAuthorizationInfo()");
-
-        SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
         User user  = (User)principals.getPrimaryPrincipal();
+        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+          if(user!=null ){
+             // info.setRoles(11);
+              //User byUserid = SysRoleService(user.getId());
+              //System.out.println("byUserid = [" + byUserid + "]");
 
+          }
         //实际项目中，这里可以根据实际情况做缓存，如果不做，Shiro自己也是有时间间隔机制，2分钟内不会重复执行该方法
 //     UserInfo userInfo = userInfoService.findByUsername(username)
 
@@ -110,17 +142,19 @@ private UserService userService;
 //            info.addStringPermissions(role.getPermissionsName());
 //        }
         for(SysRole role:user.getRoleList()){
-            authorizationInfo.addRole(role.getRole());
+            info.addRole(role.getRole());
             for(SysPermission p:role.getPermissions()){
-                authorizationInfo.addStringPermission(p.getPermission());
+                info.addStringPermission(p.getPermission());
             }
         }
 
         //设置权限信息.
 //     authorizationInfo.setStringPermissions(getStringPermissions(userInfo.getRoleList()));
 
-        return authorizationInfo;
+        return info;
     }
+
+
 
 
 }

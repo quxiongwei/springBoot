@@ -13,7 +13,7 @@ public class SysPermission implements Serializable {
 
     @Id
     @GeneratedValue
-    private long id;//主键.
+    private Integer id;//主键.
     private String name;//名称.
 
     @Column(columnDefinition="enum('menu','button')")
@@ -31,7 +31,7 @@ public class SysPermission implements Serializable {
     public long getId() {
         return id;
     }
-    public void setId(long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
     public String getName() {

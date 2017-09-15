@@ -101,6 +101,15 @@ public class Usercontroller {
         return  "/userInfoDel";
     }
 
+    @RequestMapping("/articleList")
+   public String adminList(){
+        return "/articleList";
+    }
+    @RequestMapping("/adminAdd")
+    public String admin_add(){
+     return "/articleAdd";
+    }
+
 
 
 
